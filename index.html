@@ -2,17 +2,179 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width">
-  <title>My Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>loisekk — GitHub Trophies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* ALL your CSS goes here */
-    /* gradients, animations, fonts — everything! */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #05050f;
+      font-family: 'Syne', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .wrap {
+      background: linear-gradient(135deg, #0a0a0f, #0d0d1a);
+      border-radius: 20px;
+      padding: 32px 24px 36px;
+      max-width: 700px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(99,88,255,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 80% 80%, rgba(0,200,160,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .header-icon {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, #f5c542, #f0903a);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(245,197,66,0.35);
+    }
+    .header h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 13px; font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .card {
+      background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px 10px 14px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      position: relative; overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+      cursor: default;
+    }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glow), transparent);
+    }
+    .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.18); }
+    .rank-badge {
+      position: absolute; top: 7px; right: 7px;
+      font-family: 'Orbitron', monospace;
+      font-size: 8px; font-weight: 900;
+      padding: 2px 5px; border-radius: 4px;
+      background: rgba(var(--rgb), 0.15);
+      color: var(--glow);
+      border: 1px solid rgba(var(--rgb), 0.25);
+    }
+    .tname {
+      font-family: 'Orbitron', monospace;
+      font-size: 7.5px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--glow); text-align: center; opacity: 0.8;
+    }
+    .cup { width: 52px; height: 52px; }
+    .desc { font-size: 10px; color: rgba(255,255,255,0.45); text-align: center; line-height: 1.4; }
+    .pts {
+      font-family: 'Orbitron', monospace;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px;
+      background: rgba(var(--rgb), 0.12);
+      color: var(--glow);
+      border: 1px solid rgba(var(--rgb), 0.25);
+    }
+    .bar { width: 100%; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.06); overflow: hidden; }
+    .bar-fill {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--glow), var(--glow2, var(--glow)));
+      transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+      width: 0%;
+    }
+    @media(max-width:500px){ .grid{ grid-template-columns: repeat(2,1fr); } }
   </style>
 </head>
 <body>
-  <!-- All your HTML goes here -->
-  <script>
-    // All your JavaScript goes here
-  </script>
+<div class="wrap">
+  <div class="header">
+    <div class="header-icon">🏆</div>
+    <h2>GitHub Trophies</h2>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const trophies = [
+  { name:"AchieveSSSRank", desc:"SSS Rank Hacker",    pts:null,   rank:"SSS", glow:"#f5c542", glow2:"#f0903a", rgb:"245,197,66",  fill:100 },
+  { name:"MultiLanguage",  desc:"Rainbow Lang User",  pts:"5pt",  rank:"S",   glow:"#f5c542", glow2:"#fde68a", rgb:"245,197,66",  fill:55  },
+  { name:"LongTimeUser",   desc:"Village Elder",      pts:"0yr",  rank:"S",   glow:"#f5c542", glow2:"#fbbf24", rgb:"245,197,66",  fill:50  },
+  { name:"NewUser",        desc:"After 2020",         pts:null,   rank:"S",   glow:"#f5c542", glow2:"#f0903a", rgb:"245,197,66",  fill:48  },
+  { name:"Commits",        desc:"Super Committer",    pts:"707pt",rank:"S",   glow:"#00d4ff", glow2:"#0080ff", rgb:"0,212,255",   fill:88  },
+  { name:"Stars",          desc:"High Star",          pts:"75pt", rank:"A",   glow:"#a78bfa", glow2:"#7c3aed", rgb:"167,139,250", fill:62  },
+  { name:"Repositories",  desc:"Hyper Repo Creator", pts:"37pt", rank:"A",   glow:"#2dd4bf", glow2:"#059669", rgb:"45,212,191",  fill:50  },
+  { name:"Followers",     desc:"Many Friends",        pts:"11pt", rank:"B",   glow:"#00d4ff", glow2:"#0ea5e9", rgb:"0,212,255",   fill:30  },
+  { name:"Issues",        desc:"First Issue",         pts:"1pt",  rank:"C",   glow:"#94a3b8", glow2:"#64748b", rgb:"148,163,184", fill:15  },
+  { name:"PullRequest",   desc:"First Pull",          pts:"4pt",  rank:"C",   glow:"#94a3b8", glow2:"#64748b", rgb:"148,163,184", fill:20  },
+  { name:"AncientUser",   desc:"Before 2010",         pts:"?",    rank:"?",   glow:"#94a3b8", glow2:"#64748b", rgb:"148,163,184", fill:0   },
+  { name:"Organizations", desc:"Unknown",             pts:"0pt",  rank:"?",   glow:"#94a3b8", glow2:"#64748b", rgb:"148,163,184", fill:0   },
+];
+
+function cupSVG(t) {
+  return `<svg class="cup" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="g${t.name}" x1="10" y1="6" x2="42" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="${t.glow}" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="${t.glow2}"/>
+    </linearGradient></defs>
+    <path d="M14 16 Q4 16 4 22 Q4 30 14 30" stroke="${t.glow2}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M38 16 Q48 16 48 22 Q48 30 38 30" stroke="${t.glow2}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M14 10 L38 10 L34 36 L18 36 Z" fill="url(#g${t.name})"/>
+    <rect x="12" y="8" width="28" height="5" rx="2.5" fill="${t.glow}" opacity="0.9"/>
+    <path d="M17 13 Q19 11 21 13 L21 32 Q19 33 17 32Z" fill="white" opacity="0.1"/>
+    <rect x="22" y="36" width="8" height="5" rx="1" fill="${t.glow2}"/>
+    <rect x="16" y="41" width="20" height="4" rx="2" fill="${t.glow}"/>
+    <text x="26" y="29" text-anchor="middle" font-family="'Orbitron',monospace" font-size="${t.rank==='?'?14:13}" font-weight="900" fill="rgba(0,0,0,0.75)">${t.rank}</text>
+  </svg>`;
+}
+
+const grid = document.getElementById('grid');
+trophies.forEach((t, i) => {
+  const c = document.createElement('div');
+  c.className = 'card';
+  c.style.cssText = `--glow:${t.glow};--glow2:${t.glow2};--rgb:${t.rgb};opacity:0;transform:translateY(14px);transition:opacity 0.4s ease ${i*55}ms,transform 0.4s ease ${i*55}ms,border-color 0.25s,box-shadow 0.25s`;
+  c.innerHTML = `
+    <div class="rank-badge">${t.rank}</div>
+    <div class="tname">${t.name}</div>
+    ${cupSVG(t)}
+    <div class="desc">${t.desc}</div>
+    ${t.pts!==null?`<div class="pts">${t.pts}</div>`:''}
+    <div class="bar"><div class="bar-fill" data-fill="${t.fill}"></div></div>`;
+  grid.appendChild(c);
+  setTimeout(() => { c.style.opacity='1'; c.style.transform='translateY(0)'; }, 80 + i*55);
+});
+
+setTimeout(() => {
+  document.querySelectorAll('.bar-fill').forEach(el => { el.style.width = el.dataset.fill + '%'; });
+}, 500);
+</script>
 </body>
 </html>
